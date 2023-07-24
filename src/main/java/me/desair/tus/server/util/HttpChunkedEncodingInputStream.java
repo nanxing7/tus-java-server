@@ -15,40 +15,39 @@ import org.slf4j.LoggerFactory;
 /**
  * Transparently coalesces chunks of a HTTP stream that uses Transfer-Encoding chunked. This {@link
  * InputStream} wrapper also supports collecting Trailer header values that are sent at the end of
- * the stream.
- *
- * <p>Based on org.apache.commons.httpclient.ChunkedInputStream
+ * the stream. <br>
+ * Based on org.apache.commons.httpclient.ChunkedInputStream
  */
 public class HttpChunkedEncodingInputStream extends InputStream {
 
   private static final Logger log = LoggerFactory.getLogger(HttpChunkedEncodingInputStream.class);
 
-  /** The input stream that we're wrapping */
+  /** The input stream that we're wrapping. */
   private InputStream in;
 
-  /** The current chunk size */
+  /** The current chunk size. */
   private int chunkSize = 0;
 
-  /** The current position within the current chunk */
+  /** The current position within the current chunk. */
   private int pos = 0;
 
-  /** True if we'are at the beginning of stream */
+  /** True if we'are at the beginning of stream. */
   private boolean bof = true;
 
-  /** True if we've reached the end of stream */
+  /** True if we've reached the end of stream. */
   private boolean eof = false;
 
-  /** True if this stream is closed */
+  /** True if this stream is closed. */
   private boolean closed = false;
 
-  /** Map to store any trailer headers */
+  /** Map to store any trailer headers. */
   private Map<String, List<String>> trailerHeaders = null;
 
   /**
    * Wrap the given input stream and store any trailing headers in the provided map.
    *
    * @param in the raw input stream
-   * @param trailerHeaders Map to store any trailer header values. Can be <tt>null</tt>.
+   * @param trailerHeaders Map to store any trailer header values. Can be <b>null</b>.
    */
   public HttpChunkedEncodingInputStream(InputStream in, Map<String, List<String>> trailerHeaders) {
 
@@ -144,7 +143,7 @@ public class HttpChunkedEncodingInputStream extends InputStream {
    *
    * @throws IOException If an IO error occurs.
    */
-  private void readCRLF() throws IOException {
+  private void readCrLf() throws IOException {
     int cr = in.read();
     int lf = in.read();
     if ((cr != '\r') || (lf != '\n')) {
@@ -159,7 +158,7 @@ public class HttpChunkedEncodingInputStream extends InputStream {
    */
   private void nextChunk() throws IOException {
     if (!bof) {
-      readCRLF();
+      readCrLf();
     }
     chunkSize = getChunkSize();
     if (chunkSize < 0) {
@@ -211,7 +210,7 @@ public class HttpChunkedEncodingInputStream extends InputStream {
     }
 
     // parse data
-    return new String(baos.toByteArray(), Charset.forName("US-ASCII"));
+    return new String(baos.toByteArray(), StandardCharsets.US_ASCII);
   }
 
   /**

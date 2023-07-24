@@ -9,6 +9,7 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.collection.IsMapContaining.hasEntry;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -37,6 +38,7 @@ import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
+/** Test cases for the {@link TusFileUploadService}. */
 public class ITTusFileUploadService {
 
   protected static final String UPLOAD_URI = "/test/upload";
@@ -68,7 +70,7 @@ public class ITTusFileUploadService {
     reset();
     tusFileUploadService =
         new TusFileUploadService()
-            .withUploadURI(UPLOAD_URI)
+            .withUploadUri(UPLOAD_URI)
             .withStoragePath(storagePath.toAbsolutePath().toString())
             .withMaxUploadSize(1073741824L)
             .withUploadExpirationPeriod(2L * 24 * 60 * 60 * 1000)
@@ -1240,14 +1242,14 @@ public class ITTusFileUploadService {
   }
 
   @Test
-  public void testChunkedDecodingDisabledAndRegexUploadURI() throws Exception {
+  public void testChunkedDecodingDisabledAndRegexUploadUri() throws Exception {
     String chunkedContent =
         "1B;test=value\r\nThis upload looks chunked, \r\n" + "D\r\nbut it's not!\r\n" + "\r\n0\r\n";
 
     // Create service without chunked decoding
     tusFileUploadService =
         new TusFileUploadService()
-            .withUploadURI("/users/[0-9]+/files/upload")
+            .withUploadUri("/users/[0-9]+/files/upload")
             .withStoragePath(storagePath.toAbsolutePath().toString())
             .withDownloadFeature();
 
@@ -1438,7 +1440,7 @@ public class ITTusFileUploadService {
   }
 
   protected void assertResponseHeaderNull(final String header) {
-    assertTrue(servletResponse.getHeader(header) == null);
+    assertNull(servletResponse.getHeader(header));
   }
 
   protected void assertResponseStatus(final int httpStatus) {

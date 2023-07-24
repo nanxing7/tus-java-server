@@ -17,9 +17,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The Server SHOULD accept PATCH requests against any upload URL and apply the bytes contained in
- * the message at the given offset specified by the Upload-Offset header.
- *
- * <p>The Server MUST acknowledge successful PATCH requests with the 204 No Content status. It MUST
+ * the message at the given offset specified by the Upload-Offset header. <br>
+ * The Server MUST acknowledge successful PATCH requests with the 204 No Content status. It MUST
  * include the Upload-Offset header containing the new offset. The new offset MUST be the sum of the
  * offset before the PATCH request and the number of bytes received and processed or stored during
  * the current PATCH request.
@@ -69,9 +68,9 @@ public class CorePatchRequestHandler extends AbstractRequestHandler {
       }
     } else {
       log.error(
-          "The patch request handler could not find the upload for URL "
-              + servletRequest.getRequestURI()
-              + ". This means something is really wrong the request validators!");
+          "The patch request handler could not find the upload for URL {0}. "
+              + "This means something is really wrong the request validators!",
+          servletRequest.getRequestURI());
       servletResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
     }
   }
